@@ -35,7 +35,81 @@ public class MainActivity extends AppCompatActivity {
         mJsonPlaceholderAPI = retrofit.create(JsonPlaceholderAPI.class);
 
         GetPost();
-        CreatePost();
+        // CreatePost();
+        // PutPost();
+        // PatchPost();
+        // DeletePost();
+    }
+
+    private void DeletePost() {
+        Call<Void> call = mJsonPlaceholderAPI.DeletePost(5);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                textViewPosts.setText("Code: " + response.code());
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                textViewPosts.setText(t.getMessage());
+            }
+        });
+    }
+
+    private void PatchPost() {
+        Post post = new Post(5, null, "Update Body");
+        Call<Post> call = mJsonPlaceholderAPI.PatchPost(5, post);
+        call.enqueue(new Callback<Post>() {
+            @Override
+            public void onResponse(Call<Post> call, Response<Post> response) {
+                if (!response.isSuccessful()) {
+                    textViewPosts.setText("Code: " + response.code());
+                    return;
+                }
+
+                Post post = response.body();
+                String content = "";
+                content += "ID: " + post.getId() + "\n";
+                content += "UsetID: " + post.getUser_id() + "\n";
+                content += "Title: " + post.getTitle() + "\n";
+                content += "Text: " + post.getText() + "\n\n";
+
+                textViewPosts.append(content);
+            }
+
+            @Override
+            public void onFailure(Call<Post> call, Throwable t) {
+                textViewPosts.setText(t.getMessage());
+            }
+        });
+    }
+
+    private void PutPost() {
+        Post post = new Post(5,null,"Update Body");
+        Call<Post> call = mJsonPlaceholderAPI.PutPost(5, post);
+        call.enqueue(new Callback<Post>() {
+            @Override
+            public void onResponse(Call<Post> call, Response<Post> response) {
+                if (!response.isSuccessful()) {
+                    textViewPosts.setText("Code: " + response.code());
+                    return;
+                }
+
+                Post post = response.body();
+                String content = "";
+                content += "ID: " + post.getId() + "\n";
+                content += "UsetID: " + post.getUser_id() + "\n";
+                content += "Title: " + post.getTitle() + "\n";
+                content += "Text: " + post.getText() + "\n\n";
+
+                textViewPosts.append(content);
+            }
+
+            @Override
+            public void onFailure(Call<Post> call, Throwable t) {
+                textViewPosts.setText(t.getMessage());
+            }
+        });
     }
 
     private void CreatePost() {
